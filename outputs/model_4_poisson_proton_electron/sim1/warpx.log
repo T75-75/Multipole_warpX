@@ -1,0 +1,484 @@
+Initializing AMReX (26.03)...
+OMP initialized with 8 OMP threads
+AMReX (26.03) initialized
+PICSAR (25.06)
+WarpX (Unknown)
+
+                                   ___
+    __        __             ___  /  /
+    \ \      / /_ _ _ __ _ __\  \/  /
+     \ \ /\ / / _` | '__| '_ \\    /
+      \ V  V / (_| | |  | |_) /    \
+       \_/\_/ \__,_|_|  | .__/__/\  \
+                        |_|       \__\
+
+Level 0: dt = 1e-09 ; dx = 3.125e-05 ; dz = 3.125e-05
+
+Grids Summary:
+  Level 0   4 grids  16384 cells  100 % of domain
+            smallest grid: 64 x 64  biggest grid: 64 x 64
+
+-------------------------------------------------------------------------------
+--------------------------- MAIN EM PIC PARAMETERS ----------------------------
+-------------------------------------------------------------------------------
+Precision:            | DOUBLE
+Particle precision:   | DOUBLE
+Geometry:             | 2D (XZ)
+Operation mode:       | Electrostatic
+                      | - laboratory frame
+                      | - vacuum
+Poisson solver:       | multigrid
+-------------------------------------------------------------------------------
+Current Deposition:   | direct 
+Guard cells           | - ng_alloc_J  = (1,1)
+ (allocated for J)    | 
+Particle Pusher:      | Boris 
+Charge Deposition:    | standard 
+Field Gathering:      | energy-conserving 
+Particle Shape Factor:| 1
+-------------------------------------------------------------------------------
+                      | - current correction is ON 
+                      | - staggered grid 
+Guard cells           | - ng_alloc_EB = (2,2)
+ (allocated for E/B)  | 
+-------------------------------------------------------------------------------
+For full input parameters, see the file: ../../outputs/model_4_poisson_proton_electron/sim1/warpx_used_inputs
+
+--- INFO    : Writing openPMD file
+             ../../outputs/model_4_poisson_proton_electron/sim1/diags000000
+STEP 1 starts ...
+--- INFO    : updating timestep
+--- INFO    : Writing openPMD file
+             ../../outputs/model_4_poisson_proton_electron/sim1/diags000001
+
+Unused ParmParse Variables:
+  [TOP]::my_constants.r0(nvals = 1)  :: [1.0e-3]
+
+
+**** WARNINGS ******************************************************************
+* GLOBAL warning list  after  [ FIRST STEP ]
+*
+* No recorded warnings.
+********************************************************************************
+
+STEP 1 ends. TIME = 1.689645921e-12 DT = 1.689645921e-12
+Evolve time = 0.031396042 s; This step = 0.031396042 s; Avg. per step = 0.031396042 s
+
+STEP 2 starts ...
+--- INFO    : updating timestep
+--- INFO    : Writing openPMD file
+             ../../outputs/model_4_poisson_proton_electron/sim1/diags000002
+STEP 2 ends. TIME = 3.37929183e-12 DT = 1.68964591e-12
+Evolve time = 0.061909834 s; This step = 0.030513792 s; Avg. per step = 0.030954917 s
+
+
+**** WARNINGS ******************************************************************
+* GLOBAL warning list  after  [ THE END ]
+*
+* No recorded warnings.
+********************************************************************************
+
+Total Time                     : 0.105669417
+
+
+TinyProfiler total time across processes [min...avg...max]: 0.1057 ... 0.1057 ... 0.1057
+
+---------------------------------------------------------------------------------------------------------------------
+Name                                                                  NCalls  Excl. Min  Excl. Avg  Excl. Max   Max %
+---------------------------------------------------------------------------------------------------------------------
+MLNodeLinOp::applyBC()                                                  1062    0.01977    0.01977    0.01977  18.70%
+MLNodeTensorLaplacian::Fsmooth()                                         960    0.01819    0.01819    0.01819  17.21%
+WarpXOpenPMDPlot::WriteOpenPMDFields()                                     3    0.01535    0.01535    0.01535  14.52%
+FillBoundary_nowait()                                                   1370    0.01386    0.01386    0.01386  13.11%
+FabArray::setVal()                                                       236   0.004676   0.004676   0.004676   4.42%
+WarpXOpenPMDPlot::SeriesFlush()()                                         15   0.002911   0.002911   0.002911   2.75%
+MLNodeTensorLaplacian::Fapply()                                          102   0.002104   0.002104   0.002104   1.99%
+FabArray::norminf()                                                       55   0.001985   0.001985   0.001985   1.88%
+amrex::Dot()                                                              58   0.001889   0.001889   0.001889   1.79%
+FabArray::ParallelCopy_nowait()                                           80   0.001353   0.001353   0.001353   1.28%
+MLNodeLinOp::buildMasks()                                                  3   0.001341   0.001341   0.001341   1.27%
+ParticleContainer::RedistributeCPU()                                       8    0.00131    0.00131    0.00131   1.24%
+FlushFormatOpenPMD::WriteToFile()                                          3   0.001272   0.001272   0.001272   1.20%
+WarpXOpenPMDPlot::CloseStep()                                              3   0.001226   0.001226   0.001226   1.16%
+MLNodeTensorLaplacian::restriction()                                      60   0.001156   0.001156   0.001156   1.09%
+WarpXOpenPMDPlot::WriteOpenPMDFields::CPU_span()                          48   0.001094   0.001094   0.001094   1.04%
+MLNodeTensorLaplacian::interpolation()                                    60   0.001081   0.001081   0.001081   1.02%
+FabArray::Xpay()                                                          60    0.00108    0.00108    0.00108   1.02%
+sample::Coarsen()                                                         16  0.0009889  0.0009889  0.0009889   0.94%
+Diagnostics::FilterComputePackFlush()                                      4  0.0008722  0.0008722  0.0008722   0.83%
+MLLinOp::defineGrids()                                                     3  0.0008254  0.0008254  0.0008254   0.78%
+amrex::Copy()                                                             91  0.0007748  0.0007748  0.0007748   0.73%
+WarpXParticleContainer::DepositCharge                                      6  0.0006432  0.0006432  0.0006432   0.61%
+WarpX::InitData()                                                          1  0.0006246  0.0006246  0.0006246   0.59%
+PhysicalParticleContainer::PushP()                                         8  0.0005034  0.0005034  0.0005034   0.48%
+WarpXOpenPMDPlot::DumpToFile()                                             6  0.0004468  0.0004468  0.0004468   0.42%
+main()                                                                     1    0.00044    0.00044    0.00044   0.42%
+WarpX::Evolve::step                                                        2  0.0004332  0.0004332  0.0004332   0.41%
+WarpXOpenPMDPlot::WriteOpenPMDParticles()                                  3  0.0004311  0.0004311  0.0004311   0.41%
+WarpX::ComputeSpaceChargeField                                             3   0.000407   0.000407   0.000407   0.39%
+FabArray::BuildMask()                                                     21  0.0003919  0.0003919  0.0003919   0.37%
+FabArray::setVal(val, thecmd, scomp, ncomp)                               21  0.0003818  0.0003818  0.0003818   0.36%
+FabArray::plus()                                                          23  0.0003756  0.0003756  0.0003756   0.36%
+ParticleContainer::addParticles                                            6  0.0003694  0.0003694  0.0003694   0.35%
+FabArrayBase::getFB()                                                   1391    0.00034    0.00034    0.00034   0.32%
+amrex::Add()                                                              18   0.000339   0.000339   0.000339   0.32%
+MLNodeTensorLaplacian::smooth()                                          130  0.0003364  0.0003364  0.0003364   0.32%
+FabArray::Saxpy_Saxpy()                                                   16  0.0002849  0.0002849  0.0002849   0.27%
+PhysicalParticleContainer::Evolve()                                        4   0.000262   0.000262   0.000262   0.25%
+MLMG::oneIter()                                                           10  0.0002536  0.0002536  0.0002536   0.24%
+FabArray::FillBoundary()                                                1110  0.0002466  0.0002466  0.0002466   0.23%
+PhysicalParticleContainer::AddParticles()                                  2  0.0002308  0.0002308  0.0002308   0.22%
+WarpXParticleContainer::ApplyBoundaryConditions()                          4  0.0002209  0.0002209  0.0002209   0.21%
+FabArray::Saypy_Saxpy()                                                   13  0.0002209  0.0002209  0.0002209   0.21%
+ablastr::particles::deposit_charge::Accumulate                            60  0.0002152  0.0002152  0.0002152   0.20%
+MLMG::actualBottomSolve()                                                 10   0.000215   0.000215   0.000215   0.20%
+MLMG::computeResidual()                                                   10  0.0002106  0.0002106  0.0002106   0.20%
+MLMG::prepareForSolve()                                                    3  0.0001974  0.0001974  0.0001974   0.19%
+computePhi                                                                 3  0.0001095  0.0001095  0.0001095   0.10%
+MLMG::addInterpCorrection()                                               60  0.0001019  0.0001019  0.0001019   0.10%
+MLCGSolver::bicgstab                                                      10  9.887e-05  9.887e-05  9.887e-05   0.09%
+FAbArray::OverrideSync()                                                 253  9.449e-05  9.449e-05  9.449e-05   0.09%
+OverrideSync_nowait()                                                    253  7.244e-05  7.244e-05  7.244e-05   0.07%
+MLMG::computeMLResidual()                                                  3   5.65e-05   5.65e-05   5.65e-05   0.05%
+MLNodeTensorLaplacian::define()                                            3      5e-05      5e-05      5e-05   0.05%
+MLMG:computeResOfCorrection()                                             60  3.938e-05  3.938e-05  3.938e-05   0.04%
+FabArray::ParallelCopy()                                                  80  3.234e-05  3.234e-05  3.234e-05   0.03%
+ablastr::utils::communication::FillBoundary                               48  2.975e-05  2.975e-05  2.975e-05   0.03%
+MLCGSolver::ParallelAllReduce                                             84  2.555e-05  2.555e-05  2.555e-05   0.02%
+MLMG::mgVcycle()                                                          10  2.033e-05  2.033e-05  2.033e-05   0.02%
+MLMG::mgVcycle_bottom                                                     10  1.883e-05  1.883e-05  1.883e-05   0.02%
+MLMG::solve()                                                              3  1.325e-05  1.325e-05  1.325e-05   0.01%
+MLMG::mgVcycle_down::5                                                    10  8.621e-06  8.621e-06  8.621e-06   0.01%
+MLMG::mgVcycle_down::1                                                    10  8.085e-06  8.085e-06  8.085e-06   0.01%
+MLMG::mgVcycle_down::4                                                    10  7.627e-06  7.627e-06  7.627e-06   0.01%
+MLMG::mgVcycle_down::2                                                    10  7.455e-06  7.455e-06  7.455e-06   0.01%
+MLMG::mgVcycle_down::0                                                    10  7.374e-06  7.374e-06  7.374e-06   0.01%
+MLMG::mgVcycle_down::3                                                    10  7.371e-06  7.371e-06  7.371e-06   0.01%
+MLMG::ResNormInf()                                                        13  6.708e-06  6.708e-06  6.708e-06   0.01%
+WarpX::ComputeSpaceChargeField::reset_fields                               2   6.33e-06   6.33e-06   6.33e-06   0.01%
+MLMG::mgVcycle_up::1                                                      10  5.626e-06  5.626e-06  5.626e-06   0.01%
+MLMG::mgVcycle_up::0                                                      10  5.417e-06  5.417e-06  5.417e-06   0.01%
+WarpX::Evolve()                                                            1  5.416e-06  5.416e-06  5.416e-06   0.01%
+MLMG::mgVcycle_up::5                                                      10  5.209e-06  5.209e-06  5.209e-06   0.00%
+MLMG::mgVcycle_up::4                                                      10  5.004e-06  5.004e-06  5.004e-06   0.00%
+MLMG::mgVcycle_up::3                                                      10  4.916e-06  4.916e-06  4.916e-06   0.00%
+MLMG::mgVcycle_up::2                                                      10  4.668e-06  4.668e-06  4.668e-06   0.00%
+MultiFab::Add()                                                            8  4.583e-06  4.583e-06  4.583e-06   0.00%
+ParticleContainer::copyParticles                                           6   4.25e-06   4.25e-06   4.25e-06   0.00%
+FabArray<FAB>::SumBoundary()                                               7  4.045e-06  4.045e-06  4.045e-06   0.00%
+WarpX::OneStep()                                                           2  3.375e-06  3.375e-06  3.375e-06   0.00%
+ablastr::utils::communication::SumBoundary                                 7  3.038e-06  3.038e-06  3.038e-06   0.00%
+FabArray<FAB>::SumBoundary_nowait()                                        7  2.666e-06  2.666e-06  2.666e-06   0.00%
+WarpX::SyncRho()                                                           3  2.625e-06  2.625e-06  2.625e-06   0.00%
+MLLinOp::define()                                                          3  2.001e-06  2.001e-06  2.001e-06   0.00%
+MLNodeTensorLaplacian::prepareForSolve()                                   3   1.75e-06   1.75e-06   1.75e-06   0.00%
+REG::WarpX::Evolve()                                                       1   8.75e-07   8.75e-07   8.75e-07   0.00%
+Other                                                                    552   0.000656   0.000656   0.000656   0.62%
+---------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------
+Name                                                                  NCalls  Incl. Min  Incl. Avg  Incl. Max   Max %
+---------------------------------------------------------------------------------------------------------------------
+main()                                                                     1     0.1057     0.1057     0.1057  99.96%
+WarpX::ComputeSpaceChargeField                                             3    0.07428    0.07428    0.07428  70.27%
+computePhi                                                                 3     0.0726     0.0726     0.0726  68.68%
+MLMG::solve()                                                              3    0.07093    0.07093    0.07093  67.10%
+MLMG::oneIter()                                                           10    0.06493    0.06493    0.06493  61.42%
+MLMG::mgVcycle()                                                          10    0.06413    0.06413    0.06413  60.66%
+REG::WarpX::Evolve()                                                       1    0.06283    0.06283    0.06283  59.44%
+WarpX::Evolve()                                                            1    0.06283    0.06283    0.06283  59.44%
+WarpX::Evolve::step                                                        2    0.06192    0.06192    0.06192  58.58%
+MLNodeTensorLaplacian::smooth()                                          130    0.04667    0.04667    0.04667  44.15%
+WarpX::InitData()                                                          1     0.0424     0.0424     0.0424  40.11%
+MLNodeLinOp::applyBC()                                                  1062    0.03032    0.03032    0.03032  28.69%
+Diagnostics::FilterComputePackFlush()                                      4     0.0262     0.0262     0.0262  24.78%
+FlushFormatOpenPMD::WriteToFile()                                          3    0.02312    0.02312    0.02312  21.87%
+MLNodeTensorLaplacian::Fsmooth()                                         960    0.01819    0.01819    0.01819  17.21%
+WarpXOpenPMDPlot::WriteOpenPMDFields()                                     3    0.01754    0.01754    0.01754  16.59%
+FillBoundary_nowait()                                                   1370    0.01426    0.01426    0.01426  13.49%
+FabArray::FillBoundary()                                                1110    0.01169    0.01169    0.01169  11.06%
+MLMG::mgVcycle_down::0                                                    10   0.007178   0.007178   0.007178   6.79%
+MLMG::mgVcycle_bottom                                                     10   0.006632   0.006632   0.006632   6.27%
+MLMG::actualBottomSolve()                                                 10   0.006613   0.006613   0.006613   6.26%
+MLMG::mgVcycle_down::1                                                    10   0.006492   0.006492   0.006492   6.14%
+MLMG::mgVcycle_down::2                                                    10   0.006355   0.006355   0.006355   6.01%
+MLMG::mgVcycle_up::0                                                      10   0.005895   0.005895   0.005895   5.58%
+MLCGSolver::bicgstab                                                      10   0.005875   0.005875   0.005875   5.56%
+MLMG::mgVcycle_up::1                                                      10   0.005187   0.005187   0.005187   4.91%
+MLMG::mgVcycle_up::2                                                      10   0.004966   0.004966   0.004966   4.70%
+FabArray::setVal()                                                       236   0.004676   0.004676   0.004676   4.42%
+MLMG::prepareForSolve()                                                    3   0.004174   0.004174   0.004174   3.95%
+MLMG::mgVcycle_down::4                                                    10   0.004172   0.004172   0.004172   3.95%
+MLMG:computeResOfCorrection()                                             60   0.004139   0.004139   0.004139   3.92%
+MLMG::mgVcycle_down::3                                                    10   0.004063   0.004063   0.004063   3.84%
+MLMG::mgVcycle_down::5                                                    10    0.00397    0.00397    0.00397   3.76%
+MLNodeTensorLaplacian::restriction()                                      60   0.003688   0.003688   0.003688   3.49%
+MLMG::mgVcycle_up::5                                                      10   0.003078   0.003078   0.003078   2.91%
+WarpXOpenPMDPlot::WriteOpenPMDParticles()                                  3   0.003075   0.003075   0.003075   2.91%
+MLMG::mgVcycle_up::4                                                      10   0.003065   0.003065   0.003065   2.90%
+MLMG::mgVcycle_up::3                                                      10   0.003052   0.003052   0.003052   2.89%
+WarpXOpenPMDPlot::SeriesFlush()()                                         15   0.002911   0.002911   0.002911   2.75%
+FAbArray::OverrideSync()                                                 253   0.002749   0.002749   0.002749   2.60%
+OverrideSync_nowait()                                                    253   0.002603   0.002603   0.002603   2.46%
+WarpXOpenPMDPlot::DumpToFile()                                             6   0.002269   0.002269   0.002269   2.15%
+MLNodeTensorLaplacian::prepareForSolve()                                   3   0.002155   0.002155   0.002155   2.04%
+MLNodeLinOp::buildMasks()                                                  3   0.002154   0.002154   0.002154   2.04%
+MLNodeTensorLaplacian::Fapply()                                          102   0.002104   0.002104   0.002104   1.99%
+FabArray::norminf()                                                       55   0.001985   0.001985   0.001985   1.88%
+amrex::Dot()                                                              58   0.001889   0.001889   0.001889   1.79%
+MLMG::addInterpCorrection()                                               60   0.001844   0.001844   0.001844   1.74%
+FabArray::ParallelCopy()                                                  80   0.001407   0.001407   0.001407   1.33%
+MLNodeTensorLaplacian::define()                                            3   0.001395   0.001395   0.001395   1.32%
+FabArray::ParallelCopy_nowait()                                           80   0.001375   0.001375   0.001375   1.30%
+ParticleContainer::RedistributeCPU()                                       8    0.00131    0.00131    0.00131   1.24%
+WarpXOpenPMDPlot::CloseStep()                                              3   0.001226   0.001226   0.001226   1.16%
+ablastr::utils::communication::FillBoundary                               48   0.001169   0.001169   0.001169   1.11%
+MLCGSolver::ParallelAllReduce                                             84   0.001101   0.001101   0.001101   1.04%
+WarpXOpenPMDPlot::WriteOpenPMDFields::CPU_span()                          48   0.001094   0.001094   0.001094   1.04%
+MLNodeTensorLaplacian::interpolation()                                    60   0.001081   0.001081   0.001081   1.02%
+FabArray::Xpay()                                                          60    0.00108    0.00108    0.00108   1.02%
+sample::Coarsen()                                                         16  0.0009889  0.0009889  0.0009889   0.94%
+MLMG::computeResidual()                                                   10  0.0009258  0.0009258  0.0009258   0.88%
+MLLinOp::define()                                                          3  0.0008394  0.0008394  0.0008394   0.79%
+MLLinOp::defineGrids()                                                     3  0.0008374  0.0008374  0.0008374   0.79%
+WarpXParticleContainer::DepositCharge                                      6  0.0008278  0.0008278  0.0008278   0.78%
+FabArray::BuildMask()                                                     21  0.0008131  0.0008131  0.0008131   0.77%
+PhysicalParticleContainer::AddParticles()                                  2  0.0008072  0.0008072  0.0008072   0.76%
+amrex::Copy()                                                             91  0.0007748  0.0007748  0.0007748   0.73%
+PhysicalParticleContainer::PushP()                                         8  0.0005034  0.0005034  0.0005034   0.48%
+MLMG::ResNormInf()                                                        13   0.000486   0.000486   0.000486   0.46%
+FabArrayBase::getFB()                                                   1391  0.0004436  0.0004436  0.0004436   0.42%
+FabArray::setVal(val, thecmd, scomp, ncomp)                               21  0.0003818  0.0003818  0.0003818   0.36%
+FabArray::plus()                                                          23  0.0003756  0.0003756  0.0003756   0.36%
+ParticleContainer::copyParticles                                           6  0.0003755  0.0003755  0.0003755   0.36%
+ParticleContainer::addParticles                                            6  0.0003694  0.0003694  0.0003694   0.35%
+amrex::Add()                                                              18   0.000339   0.000339   0.000339   0.32%
+WarpX::OneStep()                                                           2  0.0003008  0.0003008  0.0003008   0.28%
+ablastr::utils::communication::SumBoundary                                 7  0.0002982  0.0002982  0.0002982   0.28%
+FabArray<FAB>::SumBoundary()                                               7  0.0002952  0.0002952  0.0002952   0.28%
+PhysicalParticleContainer::Evolve()                                        4  0.0002947  0.0002947  0.0002947   0.28%
+FabArray<FAB>::SumBoundary_nowait()                                        7  0.0002884  0.0002884  0.0002884   0.27%
+FabArray::Saxpy_Saxpy()                                                   16  0.0002849  0.0002849  0.0002849   0.27%
+MLMG::computeMLResidual()                                                  3  0.0002639  0.0002639  0.0002639   0.25%
+WarpX::ComputeSpaceChargeField::reset_fields                               2  0.0002217  0.0002217  0.0002217   0.21%
+WarpXParticleContainer::ApplyBoundaryConditions()                          4  0.0002209  0.0002209  0.0002209   0.21%
+FabArray::Saypy_Saxpy()                                                   13  0.0002209  0.0002209  0.0002209   0.21%
+ablastr::particles::deposit_charge::Accumulate                            60  0.0002152  0.0002152  0.0002152   0.20%
+MultiFab::Add()                                                            8  0.0001615  0.0001615  0.0001615   0.15%
+WarpX::SyncRho()                                                           3  0.0001507  0.0001507  0.0001507   0.14%
+Other                                                                    552  0.0009857  0.0009857  0.0009857   0.93%
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+BEGIN REGION WarpX::Evolve()
+
+---------------------------------------------------------------------------------------------------------------------
+Name                                                                  NCalls  Excl. Min  Excl. Avg  Excl. Max   Max %
+---------------------------------------------------------------------------------------------------------------------
+MLNodeLinOp::applyBC()                                                   638    0.01165    0.01165    0.01165  11.02%
+MLNodeTensorLaplacian::Fsmooth()                                         576    0.01071    0.01071    0.01071  10.13%
+WarpXOpenPMDPlot::WriteOpenPMDFields()                                     2    0.01006    0.01006    0.01006   9.52%
+FillBoundary_nowait()                                                    837   0.008413   0.008413   0.008413   7.96%
+FabArray::setVal()                                                       145   0.002563   0.002563   0.002563   2.42%
+WarpXOpenPMDPlot::SeriesFlush()()                                         10    0.00177    0.00177    0.00177   1.67%
+MLNodeTensorLaplacian::Fapply()                                           62   0.001261   0.001261   0.001261   1.19%
+amrex::Dot()                                                              36   0.001208   0.001208   0.001208   1.14%
+FabArray::norminf()                                                       34   0.001201   0.001201   0.001201   1.14%
+FabArray::ParallelCopy_nowait()                                           48  0.0007945  0.0007945  0.0007945   0.75%
+WarpXOpenPMDPlot::CloseStep()                                              2  0.0007822  0.0007822  0.0007822   0.74%
+sample::Coarsen()                                                         12  0.0007695  0.0007695  0.0007695   0.73%
+MLNodeLinOp::buildMasks()                                                  2  0.0007466  0.0007466  0.0007466   0.71%
+Diagnostics::FilterComputePackFlush()                                      3  0.0006671  0.0006671  0.0006671   0.63%
+MLNodeTensorLaplacian::restriction()                                      36  0.0006474  0.0006474  0.0006474   0.61%
+MLNodeTensorLaplacian::interpolation()                                    36  0.0006466  0.0006466  0.0006466   0.61%
+FabArray::Xpay()                                                          36  0.0006278  0.0006278  0.0006278   0.59%
+PhysicalParticleContainer::PushP()                                         8  0.0005034  0.0005034  0.0005034   0.48%
+FlushFormatOpenPMD::WriteToFile()                                          2  0.0004924  0.0004924  0.0004924   0.47%
+ParticleContainer::RedistributeCPU()                                       4  0.0004833  0.0004833  0.0004833   0.46%
+amrex::Copy()                                                             68  0.0004786  0.0004786  0.0004786   0.45%
+MLLinOp::defineGrids()                                                     2  0.0004676  0.0004676  0.0004676   0.44%
+WarpX::Evolve::step                                                        2  0.0004332  0.0004332  0.0004332   0.41%
+WarpXOpenPMDPlot::WriteOpenPMDFields::CPU_span()                          32  0.0003377  0.0003377  0.0003377   0.32%
+WarpXOpenPMDPlot::WriteOpenPMDParticles()                                  2  0.0002894  0.0002894  0.0002894   0.27%
+WarpXOpenPMDPlot::DumpToFile()                                             4  0.0002857  0.0002857  0.0002857   0.27%
+WarpXParticleContainer::DepositCharge                                      4  0.0002772  0.0002772  0.0002772   0.26%
+PhysicalParticleContainer::Evolve()                                        4   0.000262   0.000262   0.000262   0.25%
+ParticleContainer::addParticles                                            4  0.0002448  0.0002448  0.0002448   0.23%
+amrex::Add()                                                              12  0.0002437  0.0002437  0.0002437   0.23%
+FabArrayBase::getFB()                                                    851  0.0002356  0.0002356  0.0002356   0.22%
+FabArray::plus()                                                          14  0.0002236  0.0002236  0.0002236   0.21%
+WarpXParticleContainer::ApplyBoundaryConditions()                          4  0.0002209  0.0002209  0.0002209   0.21%
+MLNodeTensorLaplacian::smooth()                                           78  0.0002093  0.0002093  0.0002093   0.20%
+FabArray::BuildMask()                                                     14  0.0002086  0.0002086  0.0002086   0.20%
+FabArray::setVal(val, thecmd, scomp, ncomp)                               14  0.0002059  0.0002059  0.0002059   0.19%
+FabArray::Saxpy_Saxpy()                                                   10  0.0001861  0.0001861  0.0001861   0.18%
+FabArray::FillBoundary()                                                 680  0.0001686  0.0001686  0.0001686   0.16%
+WarpX::ComputeSpaceChargeField                                             2  0.0001575  0.0001575  0.0001575   0.15%
+MLMG::actualBottomSolve()                                                  6  0.0001524  0.0001524  0.0001524   0.14%
+MLMG::oneIter()                                                            6  0.0001493  0.0001493  0.0001493   0.14%
+MLMG::prepareForSolve()                                                    2  0.0001293  0.0001293  0.0001293   0.12%
+MLMG::computeResidual()                                                    6  0.0001113  0.0001113  0.0001113   0.11%
+FAbArray::OverrideSync()                                                 152   6.47e-05   6.47e-05   6.47e-05   0.06%
+MLCGSolver::bicgstab                                                       6  6.171e-05  6.171e-05  6.171e-05   0.06%
+MLMG::addInterpCorrection()                                               36  6.125e-05  6.125e-05  6.125e-05   0.06%
+computePhi                                                                 2  6.079e-05  6.079e-05  6.079e-05   0.06%
+OverrideSync_nowait()                                                    152  4.947e-05  4.947e-05  4.947e-05   0.05%
+MLMG::computeMLResidual()                                                  2  3.471e-05  3.471e-05  3.471e-05   0.03%
+MLNodeTensorLaplacian::define()                                            2  2.638e-05  2.638e-05  2.638e-05   0.02%
+ablastr::utils::communication::FillBoundary                               42  2.579e-05  2.579e-05  2.579e-05   0.02%
+MLMG:computeResOfCorrection()                                             36  2.471e-05  2.471e-05  2.471e-05   0.02%
+FabArray::ParallelCopy()                                                  48  2.188e-05  2.188e-05  2.188e-05   0.02%
+MLCGSolver::ParallelAllReduce                                             52  1.763e-05  1.763e-05  1.763e-05   0.02%
+MLMG::mgVcycle()                                                           6  1.246e-05  1.246e-05  1.246e-05   0.01%
+MLMG::solve()                                                              2  7.833e-06  7.833e-06  7.833e-06   0.01%
+WarpX::ComputeSpaceChargeField::reset_fields                               2   6.33e-06   6.33e-06   6.33e-06   0.01%
+MLMG::mgVcycle_down::5                                                     6  5.456e-06  5.456e-06  5.456e-06   0.01%
+WarpX::Evolve()                                                            1  5.416e-06  5.416e-06  5.416e-06   0.01%
+MLMG::mgVcycle_down::1                                                     6  5.167e-06  5.167e-06  5.167e-06   0.00%
+MLMG::mgVcycle_down::4                                                     6  4.874e-06  4.874e-06  4.874e-06   0.00%
+MLMG::mgVcycle_down::3                                                     6  4.664e-06  4.664e-06  4.664e-06   0.00%
+MLMG::mgVcycle_down::2                                                     6  4.499e-06  4.499e-06  4.499e-06   0.00%
+MLMG::mgVcycle_down::0                                                     6  4.332e-06  4.332e-06  4.332e-06   0.00%
+MLMG::ResNormInf()                                                         8  4.292e-06  4.292e-06  4.292e-06   0.00%
+MLMG::mgVcycle_up::1                                                       6  3.751e-06  3.751e-06  3.751e-06   0.00%
+MLMG::mgVcycle_up::0                                                       6    3.5e-06    3.5e-06    3.5e-06   0.00%
+MLMG::mgVcycle_bottom                                                      6  3.499e-06  3.499e-06  3.499e-06   0.00%
+WarpX::OneStep()                                                           2  3.375e-06  3.375e-06  3.375e-06   0.00%
+MLMG::mgVcycle_up::5                                                       6  3.336e-06  3.336e-06  3.336e-06   0.00%
+MLMG::mgVcycle_up::3                                                       6  3.208e-06  3.208e-06  3.208e-06   0.00%
+MLMG::mgVcycle_up::4                                                       6  3.167e-06  3.167e-06  3.167e-06   0.00%
+MLMG::mgVcycle_up::2                                                       6  3.083e-06  3.083e-06  3.083e-06   0.00%
+ParticleContainer::copyParticles                                           4  2.833e-06  2.833e-06  2.833e-06   0.00%
+FabArray<FAB>::SumBoundary()                                               5   2.71e-06   2.71e-06   2.71e-06   0.00%
+ablastr::utils::communication::SumBoundary                                 5  2.206e-06  2.206e-06  2.206e-06   0.00%
+FabArray<FAB>::SumBoundary_nowait()                                        5  1.792e-06  1.792e-06  1.792e-06   0.00%
+MLLinOp::define()                                                          2  1.417e-06  1.417e-06  1.417e-06   0.00%
+MLNodeTensorLaplacian::prepareForSolve()                                   2  1.041e-06  1.041e-06  1.041e-06   0.00%
+REG::WarpX::Evolve()                                                       1   8.75e-07   8.75e-07   8.75e-07   0.00%
+Other                                                                    426  0.0006012  0.0006012  0.0006012   0.57%
+---------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------
+Name                                                                  NCalls  Incl. Min  Incl. Avg  Incl. Max   Max %
+---------------------------------------------------------------------------------------------------------------------
+REG::WarpX::Evolve()                                                       1    0.06283    0.06283    0.06283  59.44%
+WarpX::Evolve()                                                            1    0.06283    0.06283    0.06283  59.44%
+WarpX::Evolve::step                                                        2    0.06192    0.06192    0.06192  58.58%
+WarpX::ComputeSpaceChargeField                                             2    0.04365    0.04365    0.04365  41.29%
+computePhi                                                                 2    0.04284    0.04284    0.04284  40.53%
+MLMG::solve()                                                              2     0.0419     0.0419     0.0419  39.64%
+MLMG::oneIter()                                                            6    0.03845    0.03845    0.03845  36.37%
+MLMG::mgVcycle()                                                           6    0.03796    0.03796    0.03796  35.91%
+MLNodeTensorLaplacian::smooth()                                           78    0.02753    0.02753    0.02753  26.05%
+MLNodeLinOp::applyBC()                                                   638     0.0178     0.0178     0.0178  16.84%
+Diagnostics::FilterComputePackFlush()                                      3    0.01663    0.01663    0.01663  15.73%
+FlushFormatOpenPMD::WriteToFile()                                          2    0.01428    0.01428    0.01428  13.51%
+WarpXOpenPMDPlot::WriteOpenPMDFields()                                     2      0.011      0.011      0.011  10.40%
+MLNodeTensorLaplacian::Fsmooth()                                         576    0.01071    0.01071    0.01071  10.13%
+FillBoundary_nowait()                                                    837    0.00866    0.00866    0.00866   8.19%
+FabArray::FillBoundary()                                                 680   0.007145   0.007145   0.007145   6.76%
+MLMG::mgVcycle_bottom                                                      6   0.004239   0.004239   0.004239   4.01%
+MLMG::actualBottomSolve()                                                  6   0.004235   0.004235   0.004235   4.01%
+MLMG::mgVcycle_down::0                                                     6   0.004075   0.004075   0.004075   3.85%
+MLCGSolver::bicgstab                                                       6   0.003767   0.003767   0.003767   3.56%
+MLMG::mgVcycle_down::1                                                     6   0.003615   0.003615   0.003615   3.42%
+MLMG::mgVcycle_down::2                                                     6    0.00353    0.00353    0.00353   3.34%
+MLMG::mgVcycle_up::0                                                       6   0.003456   0.003456   0.003456   3.27%
+MLMG::mgVcycle_up::2                                                       6   0.003096   0.003096   0.003096   2.93%
+MLMG::mgVcycle_up::1                                                       6   0.003093   0.003093   0.003093   2.93%
+FabArray::setVal()                                                       145   0.002563   0.002563   0.002563   2.42%
+MLMG::prepareForSolve()                                                    2    0.00242    0.00242    0.00242   2.29%
+MLMG::mgVcycle_down::5                                                     6   0.002393   0.002393   0.002393   2.26%
+MLMG::mgVcycle_down::4                                                     6   0.002392   0.002392   0.002392   2.26%
+MLMG:computeResOfCorrection()                                             36   0.002372   0.002372   0.002372   2.24%
+MLMG::mgVcycle_down::3                                                     6   0.002335   0.002335   0.002335   2.21%
+MLNodeTensorLaplacian::restriction()                                      36   0.002085   0.002085   0.002085   1.97%
+WarpXOpenPMDPlot::WriteOpenPMDParticles()                                  2   0.002004   0.002004   0.002004   1.90%
+MLMG::mgVcycle_up::5                                                       6   0.001919   0.001919   0.001919   1.82%
+MLMG::mgVcycle_up::4                                                       6   0.001911   0.001911   0.001911   1.81%
+MLMG::mgVcycle_up::3                                                       6   0.001897   0.001897   0.001897   1.79%
+WarpXOpenPMDPlot::SeriesFlush()()                                         10    0.00177    0.00177    0.00177   1.67%
+FAbArray::OverrideSync()                                                 152   0.001646   0.001646   0.001646   1.56%
+OverrideSync_nowait()                                                    152   0.001544   0.001544   0.001544   1.46%
+WarpXOpenPMDPlot::DumpToFile()                                             4   0.001466   0.001466   0.001466   1.39%
+MLNodeTensorLaplacian::Fapply()                                           62   0.001261   0.001261   0.001261   1.19%
+amrex::Dot()                                                              36   0.001208   0.001208   0.001208   1.14%
+FabArray::norminf()                                                       34   0.001201   0.001201   0.001201   1.14%
+MLNodeTensorLaplacian::prepareForSolve()                                   2   0.001174   0.001174   0.001174   1.11%
+MLNodeLinOp::buildMasks()                                                  2   0.001173   0.001173   0.001173   1.11%
+MLMG::addInterpCorrection()                                               36   0.001097   0.001097   0.001097   1.04%
+ablastr::utils::communication::FillBoundary                               42   0.001023   0.001023   0.001023   0.97%
+FabArray::ParallelCopy()                                                  48  0.0008314  0.0008314  0.0008314   0.79%
+FabArray::ParallelCopy_nowait()                                           48  0.0008095  0.0008095  0.0008095   0.77%
+WarpXOpenPMDPlot::CloseStep()                                              2  0.0007822  0.0007822  0.0007822   0.74%
+MLNodeTensorLaplacian::define()                                            2    0.00078    0.00078    0.00078   0.74%
+sample::Coarsen()                                                         12  0.0007695  0.0007695  0.0007695   0.73%
+MLCGSolver::ParallelAllReduce                                             52  0.0006954  0.0006954  0.0006954   0.66%
+MLNodeTensorLaplacian::interpolation()                                    36  0.0006466  0.0006466  0.0006466   0.61%
+FabArray::Xpay()                                                          36  0.0006278  0.0006278  0.0006278   0.59%
+MLMG::computeResidual()                                                    6  0.0005398  0.0005398  0.0005398   0.51%
+PhysicalParticleContainer::PushP()                                         8  0.0005034  0.0005034  0.0005034   0.48%
+ParticleContainer::RedistributeCPU()                                       4  0.0004833  0.0004833  0.0004833   0.46%
+amrex::Copy()                                                             68  0.0004786  0.0004786  0.0004786   0.45%
+MLLinOp::define()                                                          2  0.0004775  0.0004775  0.0004775   0.45%
+MLLinOp::defineGrids()                                                     2  0.0004761  0.0004761  0.0004761   0.45%
+FabArray::BuildMask()                                                     14  0.0004266  0.0004266  0.0004266   0.40%
+WarpXOpenPMDPlot::WriteOpenPMDFields::CPU_span()                          32  0.0003377  0.0003377  0.0003377   0.32%
+WarpX::OneStep()                                                           2  0.0003008  0.0003008  0.0003008   0.28%
+WarpXParticleContainer::DepositCharge                                      4  0.0002994  0.0002994  0.0002994   0.28%
+PhysicalParticleContainer::Evolve()                                        4  0.0002947  0.0002947  0.0002947   0.28%
+FabArrayBase::getFB()                                                    851  0.0002587  0.0002587  0.0002587   0.24%
+MLMG::ResNormInf()                                                         8  0.0002531  0.0002531  0.0002531   0.24%
+ParticleContainer::copyParticles                                           4  0.0002487  0.0002487  0.0002487   0.24%
+ParticleContainer::addParticles                                            4  0.0002448  0.0002448  0.0002448   0.23%
+amrex::Add()                                                              12  0.0002437  0.0002437  0.0002437   0.23%
+FabArray::plus()                                                          14  0.0002236  0.0002236  0.0002236   0.21%
+WarpX::ComputeSpaceChargeField::reset_fields                               2  0.0002217  0.0002217  0.0002217   0.21%
+WarpXParticleContainer::ApplyBoundaryConditions()                          4  0.0002209  0.0002209  0.0002209   0.21%
+FabArray::setVal(val, thecmd, scomp, ncomp)                               14  0.0002059  0.0002059  0.0002059   0.19%
+ablastr::utils::communication::SumBoundary                                 5  0.0001975  0.0001975  0.0001975   0.19%
+FabArray<FAB>::SumBoundary()                                               5  0.0001953  0.0001953  0.0001953   0.18%
+FabArray<FAB>::SumBoundary_nowait()                                        5  0.0001904  0.0001904  0.0001904   0.18%
+FabArray::Saxpy_Saxpy()                                                   10  0.0001861  0.0001861  0.0001861   0.18%
+MLMG::computeMLResidual()                                                  2  0.0001526  0.0001526  0.0001526   0.14%
+Other                                                                    426  0.0009939  0.0009939  0.0009939   0.94%
+---------------------------------------------------------------------------------------------------------------------
+
+END REGION WarpX::Evolve()
+Unused ParmParse Variables:
+  [TOP]::my_constants.r0(nvals = 1)  :: [1.0e-3]
+
+Pinned Memory Usage:
+---------------------------------------------------------------------
+Name                                       Nalloc    AvgMem    MaxMem
+---------------------------------------------------------------------
+The_Pinned_Arena::Initialize()                  1    41   B  8192 KiB
+ParticleContainer::addParticles               714   735   B    30 KiB
+PhysicalParticleContainer::AddParticles()      36   162   B    29 KiB
+main()                                        131  1083   B  1152   B
+Unprofiled                                      8     0   B    32   B
+WarpX::InitData()                               1     0   B    32   B
+---------------------------------------------------------------------
+
+Cpu Memory Usage:
+---------------------------------------------------------------------
+Name                                       Nalloc    AvgMem    MaxMem
+---------------------------------------------------------------------
+WarpX::InitData()                              48  2012 KiB  2097 KiB
+MLMG::prepareForSolve()                       201   567 KiB   908 KiB
+Diagnostics::FilterComputePackFlush()          48  3885   B   297 KiB
+MLNodeLinOp::buildMasks()                      63    83 KiB   132 KiB
+WarpXParticleContainer::DepositCharge          16   102 KiB   112 KiB
+ParticleContainer::RedistributeCPU()         1337    58 KiB    93 KiB
+MLNodeTensorLaplacian::define()                48    58 KiB    89 KiB
+OwnerMask()                                    15    43 KiB    66 KiB
+PhysicalParticleContainer::AddParticles()      14    98   B    30 KiB
+FillBoundary_nowait()                          84    53   B    22 KiB
+MLMG::addInterpCorrection()                    70    11   B  2592   B
+MLNodeTensorLaplacian::restriction()           70    12   B  2592   B
+MLCGSolver::bicgstab                           50    32   B   616   B
+MLMG::actualBottomSolve()                      10    11   B   200   B
+---------------------------------------------------------------------
+
+AMReX (26.03) finalized

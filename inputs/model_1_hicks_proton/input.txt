@@ -1,0 +1,114 @@
+#################################
+#### MODEL 1: HICKS PROTON #####
+#################################
+
+# Project transverse coordinates are (x, y). WarpX 2D Cartesian uses (x, z),
+# so project y is mapped to WarpX z.
+
+#################################
+########### CONSTANTS ###########
+#################################
+my_constants.r0 = 1.0e-3  # size of the trap
+my_constants.sigma_r = 3.333333333333333e-4 #standard deviation of inital position
+my_constants.ion_temperature_eV = 100.0 #initial Temperature of ions 
+my_constants.vth_over_c = sqrt(ion_temperature_eV*q_e/m_p)/clight # initial thermal speed of ions, normalized by c
+my_constants.n_macroparticles = 500 # number of simulated macroparticles
+my_constants.n_real_particles = 500 # number of real protons represented by the macroparticles
+
+my_constants.max_dt = 1e-9
+
+my_constants.Ne = 16.0
+my_constants.Vrf = 1.0e3
+my_constants.Omega = 2.0*pi*1.0e9
+my_constants.hicks_A = q_e*Vrf**2*Ne**2/(16.0*m_p*Omega**2*r0**2)
+my_constants.hicks_prefactor = hicks_A*(Ne - 2.0)/r0
+my_constants.hicks_power = Ne - 3.0
+my_constants.r_eps = 1.0e-12
+my_constants.re = r0/10.0
+my_constants.r_escape = r0 + re
+
+#################################
+####### GENERAL PARAMETERS ######
+#################################
+stop_time = 1.0e-6 # simulation over 1e-6 seconds
+amr.n_cell = 128 128
+amr.max_grid_size = 64
+amr.blocking_factor = 32
+amr.max_level = 0
+geometry.dims = 2 
+geometry.prob_lo = -2.0e-3 -2.0e-3
+geometry.prob_hi =  2.0e-3  2.0e-3
+
+#################################
+####### BOUNDARY CONDITION ######
+#################################
+boundary.field_lo = neumann neumann
+boundary.field_hi = neumann neumann
+boundary.particle_lo = absorbing absorbing # particles are absorbed at boundaries
+boundary.particle_hi = absorbing absorbing
+
+#################################
+############ NUMERICS ###########
+#################################
+warpx.do_electrostatic = labframe
+warpx.poisson_solver = multigrid
+warpx.self_fields_required_precision = 1.0e-8
+warpx.self_fields_absolute_tolerance = 0.0
+warpx.self_fields_max_iters = 100
+warpx.self_fields_verbosity = 0
+warpx.serialize_initial_conditions = 1
+warpx.synchronize_velocity_for_diagnostics = 1
+warpx.verbose = 1
+
+warpx.cfl = 0.9 # take a little margin from the cfl criteria 
+warpx.dt_update_interval = 1
+warpx.max_dt = max_dt
+
+warpx.use_filter = 0
+algo.particle_shape = 1
+
+#################################
+######## EFFECTIVE FIELD ########
+#################################
+# Hicks effective ponderomotive field for protons only. This is not the
+# instantaneous RF field and should not be shared across species.
+particles.E_ext_particle_init_style = parse_E_ext_particle_function
+particles.Ex_external_particle_function(x,y,z,t) = "if(sqrt(x*x + z*z) < r_escape, -hicks_prefactor * (sqrt(x*x + z*z + r_eps*r_eps)/r0)**hicks_power * x/sqrt(x*x + z*z + r_eps*r_eps), 0.0)"
+particles.Ey_external_particle_function(x,y,z,t) = "0.0"
+particles.Ez_external_particle_function(x,y,z,t) = "if(sqrt(x*x + z*z) < r_escape, -hicks_prefactor * (sqrt(x*x + z*z + r_eps*r_eps)/r0)**hicks_power * z/sqrt(x*x + z*z + r_eps*r_eps), 0.0)"
+
+#################################
+############ PARTICLES ##########
+#################################
+particles.species_names = ions
+
+ions.charge = q_e
+ions.mass = m_p
+ions.injection_style = gaussian_beam
+ions.x_m = 0.0
+ions.y_m = 0.0
+ions.z_m = 0.0
+ions.x_rms = sigma_r
+ions.y_rms = sigma_r
+ions.z_rms = sigma_r
+ions.npart = n_macroparticles
+ions.npart_real = n_real_particles
+ions.momentum_distribution_type = gaussian
+ions.ux_m = 0.0
+ions.uy_m = 0.0
+ions.uz_m = 0.0
+ions.ux_th = vth_over_c
+ions.uy_th = 0.0
+ions.uz_th = vth_over_c
+ions.do_not_deposit = 1
+
+#################################
+######### DIAGNOSTICS ###########
+#################################
+diagnostics.diags_names = diag1
+diag1.file_prefix = diags
+diag1.intervals = 20
+diag1.diag_type = Full
+diag1.fields_to_plot = none
+diag1.write_species = 1
+diag1.format = openpmd

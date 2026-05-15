@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.mplconfig/
+.cache/
+
+# WarpX / AMReX runtime outputs
+Backtrace.*
+simulations/**/outputs/
+simulations/**/diags*
+warpx_used_inputs
+
+# WarpX / openPMD outputs
+*.h5
+*.hdf5
+*.bp
+*.bp4
+*.bp5
+*.png
+
+# Common openPMD naming
+diags*/
+openpmd*/
+*openpmd*
+
+# Your simulation output trees
+simulations/**/outputs/
+simulations/**/diags*/

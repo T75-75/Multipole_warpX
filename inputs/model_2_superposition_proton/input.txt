@@ -1,0 +1,96 @@
+#############################################
+### MODEL 2: SUPERPOSITION PROTON PLACEHOLDER
+#############################################
+
+# Project transverse coordinates are (x, y). WarpX 2D Cartesian uses (x, z),
+# so project y is mapped to WarpX z.
+# TODO: add the analytic finite-electrode superposition RF particle field.
+# Until then, protons do not deposit charge and free-stream.
+
+#################################
+########### CONSTANTS ###########
+#################################
+my_constants.r0 = 1.0e-3
+my_constants.sigma_r = 3.333333333333333e-4
+my_constants.ion_temperature_eV = 100.0
+my_constants.vth_over_c = sqrt(ion_temperature_eV*q_e/m_p)/clight
+my_constants.n_macroparticles = 500
+my_constants.n_real_particles = 500
+
+my_constants.max_dt = 1e-9
+
+#################################
+####### GENERAL PARAMETERS ######
+#################################
+stop_time = 1.0e-6
+amr.n_cell = 128 128
+amr.max_grid_size = 64
+amr.blocking_factor = 32
+amr.max_level = 0
+geometry.dims = 2
+geometry.prob_lo = -2.0e-3 -2.0e-3
+geometry.prob_hi =  2.0e-3  2.0e-3
+
+#################################
+####### BOUNDARY CONDITION ######
+#################################
+boundary.field_lo = neumann neumann
+boundary.field_hi = neumann neumann
+boundary.particle_lo = absorbing absorbing
+boundary.particle_hi = absorbing absorbing
+
+#################################
+############ NUMERICS ###########
+#################################
+warpx.do_electrostatic = labframe
+warpx.poisson_solver = multigrid
+warpx.self_fields_required_precision = 1.0e-8
+warpx.self_fields_absolute_tolerance = 0.0
+warpx.self_fields_max_iters = 100
+warpx.self_fields_verbosity = 0
+warpx.serialize_initial_conditions = 1
+warpx.synchronize_velocity_for_diagnostics = 1
+warpx.verbose = 1
+
+warpx.cfl = 0.9
+warpx.dt_update_interval = 1
+warpx.max_dt = max_dt
+
+warpx.use_filter = 0
+algo.particle_shape = 1
+
+#################################
+############ PARTICLES ##########
+#################################
+particles.species_names = ions
+
+ions.charge = q_e
+ions.mass = m_p
+ions.injection_style = gaussian_beam
+ions.x_m = 0.0
+ions.y_m = 0.0
+ions.z_m = 0.0
+ions.x_rms = sigma_r
+ions.y_rms = sigma_r
+ions.z_rms = sigma_r
+ions.npart = n_macroparticles
+ions.npart_real = n_real_particles
+ions.momentum_distribution_type = gaussian
+ions.ux_m = 0.0
+ions.uy_m = 0.0
+ions.uz_m = 0.0
+ions.ux_th = vth_over_c
+ions.uy_th = 0.0
+ions.uz_th = vth_over_c
+ions.do_not_deposit = 1
+
+#################################
+######### DIAGNOSTICS ###########
+#################################
+diagnostics.diags_names = diag1
+diag1.file_prefix = diags
+diag1.intervals = 20
+diag1.diag_type = Full
+diag1.fields_to_plot = none
+diag1.write_species = 1
+diag1.format = openpmd
