@@ -10,10 +10,10 @@
 #################################
 my_constants.r0 = 1.0e-3  # size of the trap
 my_constants.sigma_r = 3.333333333333333e-4 #standard deviation of inital position
-my_constants.ion_temperature_eV = 100.0 #initial Temperature of ions 
+my_constants.ion_temperature_eV = 10.0 #initial Temperature of ions 
 my_constants.vth_over_c = sqrt(ion_temperature_eV*q_e/m_p)/clight # initial thermal speed of ions, normalized by c
-my_constants.n_macroparticles = 500 # number of simulated macroparticles
-my_constants.n_real_particles = 500 # number of real protons represented by the macroparticles
+my_constants.n_macroparticles = 3200 # number of simulated macroparticles
+my_constants.n_real_particles = 3200 # number of real protons represented by the macroparticles
 
 my_constants.max_dt = 1e-9
 

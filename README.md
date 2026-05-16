@@ -26,15 +26,22 @@ shared launcher.
 - `model_1_hicks_proton`: proton tracer model with the Hicks effective
   ponderomotive particle field. The proton species is named `ions` in the WarpX
   deck and does not deposit charge.
-- `model_2_superposition_proton`: proton-only placeholder for the future
-  finite-electrode superposition field. No imposed field is active yet, and
-  protons free-stream.
-- `model_3_superposition_proton_electron`: quasi-neutral proton/electron
-  placeholder for the future superposition field. No imposed field is active
-  yet, and both species free-stream.
-- `model_4_poisson_proton_electron`: quasi-neutral proton/electron cloud with
-  no imposed trap field. The electrostatic field is produced only by
-  charge deposition and the Poisson solve.
+- `model_2_superposition_proton`: proton tracer model with the analytic
+  finite-electrode superposition RF particle field. The proton species is named
+  `ions` and does not deposit charge.
+- `model_3_superposition_proton_electron`: quasi-neutral proton/electron model
+  with the analytic finite-electrode superposition RF particle field plus
+  self-consistent electrostatic fields from charge deposition. The timestep is
+  fixed at `1.0e-10 s`, so the fastest electron timescales are intentionally not
+  resolved. The electrostatic domain uses grounded PEC field boundaries so the
+  Poisson solve remains compatible after absorbing particle boundaries leave a
+  net charge.
+- `model_4_poisson_proton_electron`: quasi-neutral proton/electron model with
+  16 conducting embedded-boundary RF electrodes. Electrode fields and plasma
+  self-fields are solved together by the electrostatic Poisson solve with the
+  same fixed `1.0e-10 s` timestep. It uses grounded PEC outer field boundaries
+  so the Poisson solve remains compatible after absorbing particle boundaries
+  leave a net charge.
 
 ## Running
 

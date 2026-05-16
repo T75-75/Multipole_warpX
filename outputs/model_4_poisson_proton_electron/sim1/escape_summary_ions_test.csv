@@ -1,0 +1,4 @@
+iteration,time_s,n_initial,n_visible,n_current_trapped,n_active_visible,n_active_inside,n_active_outside,n_newly_escaped,n_visible_after_escape,n_escaped_circular,n_lost_rectangular,n_remaining_trapped
+0,0.0,500,500,500,500,499,1,0,0,0,0,500
+20,2.0019015259962277e-11,500,500,500,500,499,1,0,0,0,0,500
+40,3.371440341100235e-11,500,500,500,500,499,1,0,0,0,0,500

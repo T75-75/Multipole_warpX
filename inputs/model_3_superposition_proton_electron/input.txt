@@ -1,11 +1,13 @@
-######################################################
-### MODEL 3: SUPERPOSITION PROTON/ELECTRON PLACEHOLDER
-######################################################
+###########################################################
+### MODEL 3: SUPERPOSITION QUASI-NEUTRAL PROTON/ELECTRON
+###########################################################
 
 # Project transverse coordinates are (x, y). WarpX 2D Cartesian uses (x, z),
 # so project y is mapped to WarpX z.
-# TODO: add the analytic finite-electrode superposition RF particle field.
-# Until then, both species suppress deposition and free-stream.
+# Analytic finite-electrode superposition RF field from the report, plus
+# self-consistent electrostatic fields from ion/electron charge deposition.
+# The timestep is limited from the electron plasma frequency so electron
+# oscillations are resolved.
 
 #################################
 ########### CONSTANTS ###########
@@ -13,18 +15,66 @@
 my_constants.r0 = 1.0e-3
 my_constants.sigma_r = 3.333333333333333e-4
 my_constants.ion_temperature_eV = 100.0
-my_constants.electron_temperature_eV = 100.0
+my_constants.electron_temperature_eV = 5.0
 my_constants.vth_over_c = sqrt(ion_temperature_eV*q_e/m_p)/clight
 my_constants.electron_vth_over_c = sqrt(electron_temperature_eV*q_e/m_e)/clight
 my_constants.n_macroparticles = 500
-my_constants.n_real_particles = 500
+# Peak density for the transverse Gaussian particle initialization.
+my_constants.plasma_density_m3 = 1.0e17
+my_constants.axial_thickness = 0.1
+my_constants.effective_cross_section_area = 2.0*pi*sigma_r*sigma_r
+my_constants.n_real_particles = plasma_density_m3*effective_cross_section_area*axial_thickness
 
-my_constants.max_dt = 1e-9
+my_constants.f = 1e9
+my_constants.Vrf = 1.0e3
+my_constants.Omega = 2.0*pi*f
+my_constants.omega_pe = sqrt(plasma_density_m3*q_e**2/(epsilon0*m_e))
+my_constants.electron_plasma_period = 2.0*pi/omega_pe
+my_constants.max_dt = electron_plasma_period/10.0
+my_constants.re = r0/10.0
+my_constants.re2 = re*re
+
+### Constants for the Electric field with superposition method and 16 electrodes ###
+my_constants.fh16 = 4.0
+my_constants.super_C = 6.0/(10.0*log(re/(r0 + re)))
+my_constants.e0x = 0.0011000000000000001
+my_constants.e0z = 0
+my_constants.e1x = 0.0010162674857624155
+my_constants.e1z = 0.00042095177560159876
+my_constants.e2x = 0.00077781745930520236
+my_constants.e2z = 0.00077781745930520225
+my_constants.e3x = 0.00042095177560159887
+my_constants.e3z = 0.0010162674857624155
+my_constants.e4x = 0
+my_constants.e4z = 0.0011000000000000001
+my_constants.e5x = -0.00042095177560159871
+my_constants.e5z = 0.0010162674857624155
+my_constants.e6x = -0.00077781745930520225
+my_constants.e6z = 0.00077781745930520236
+my_constants.e7x = -0.0010162674857624155
+my_constants.e7z = 0.00042095177560159893
+my_constants.e8x = -0.0011000000000000001
+my_constants.e8z = 0
+my_constants.e9x = -0.0010162674857624157
+my_constants.e9z = -0.00042095177560159865
+my_constants.e10x = -0.00077781745930520247
+my_constants.e10z = -0.00077781745930520225
+my_constants.e11x = -0.00042095177560159941
+my_constants.e11z = -0.0010162674857624153
+my_constants.e12x = 0
+my_constants.e12z = -0.0011000000000000001
+my_constants.e13x = 0.00042095177560159903
+my_constants.e13z = -0.0010162674857624153
+my_constants.e14x = 0.00077781745930520214
+my_constants.e14z = -0.00077781745930520247
+my_constants.e15x = 0.0010162674857624153
+my_constants.e15z = -0.00042095177560159947
 
 #################################
 ####### GENERAL PARAMETERS ######
 #################################
 stop_time = 1.0e-6
+max_step = 5000
 amr.n_cell = 128 128
 amr.max_grid_size = 64
 amr.blocking_factor = 32
@@ -36,8 +86,14 @@ geometry.prob_hi =  2.0e-3  2.0e-3
 #################################
 ####### BOUNDARY CONDITION ######
 #################################
-boundary.field_lo = neumann neumann
-boundary.field_hi = neumann neumann
+# Absorbing particle boundaries can leave a net charge once one species escapes.
+# Use grounded PEC field boundaries so Poisson remains solvable after that.
+boundary.field_lo = pec pec
+boundary.field_hi = pec pec
+boundary.potential_lo_x = 0.0
+boundary.potential_hi_x = 0.0
+boundary.potential_lo_z = 0.0
+boundary.potential_hi_z = 0.0
 boundary.particle_lo = absorbing absorbing
 boundary.particle_hi = absorbing absorbing
 
@@ -62,6 +118,16 @@ warpx.use_filter = 0
 algo.particle_shape = 1
 
 #################################
+########### RF FIELD ############
+#################################
+# Project y is WarpX z. Inside any circular electrode the scalar potential is
+# constant, so the imposed electric field is zero. Outside, E = -grad(V).
+particles.E_ext_particle_init_style = parse_E_ext_particle_function
+particles.Ex_external_particle_function(x,y,z,t) = "if(((x - e0x)**2 + (z - e0z)**2) < re2, 0.0, if(((x - e1x)**2 + (z - e1z)**2) < re2, 0.0, if(((x - e2x)**2 + (z - e2z)**2) < re2, 0.0, if(((x - e3x)**2 + (z - e3z)**2) < re2, 0.0, if(((x - e4x)**2 + (z - e4z)**2) < re2, 0.0, if(((x - e5x)**2 + (z - e5z)**2) < re2, 0.0, if(((x - e6x)**2 + (z - e6z)**2) < re2, 0.0, if(((x - e7x)**2 + (z - e7z)**2) < re2, 0.0, if(((x - e8x)**2 + (z - e8z)**2) < re2, 0.0, if(((x - e9x)**2 + (z - e9z)**2) < re2, 0.0, if(((x - e10x)**2 + (z - e10z)**2) < re2, 0.0, if(((x - e11x)**2 + (z - e11z)**2) < re2, 0.0, if(((x - e12x)**2 + (z - e12z)**2) < re2, 0.0, if(((x - e13x)**2 + (z - e13z)**2) < re2, 0.0, if(((x - e14x)**2 + (z - e14z)**2) < re2, 0.0, if(((x - e15x)**2 + (z - e15z)**2) < re2, 0.0, -cos(Omega*t)*fh16*Vrf*super_C*((x - e0x)/((x - e0x)**2 + (z - e0z)**2) - (x - e1x)/((x - e1x)**2 + (z - e1z)**2) + (x - e2x)/((x - e2x)**2 + (z - e2z)**2) - (x - e3x)/((x - e3x)**2 + (z - e3z)**2) + (x - e4x)/((x - e4x)**2 + (z - e4z)**2) - (x - e5x)/((x - e5x)**2 + (z - e5z)**2) + (x - e6x)/((x - e6x)**2 + (z - e6z)**2) - (x - e7x)/((x - e7x)**2 + (z - e7z)**2) + (x - e8x)/((x - e8x)**2 + (z - e8z)**2) - (x - e9x)/((x - e9x)**2 + (z - e9z)**2) + (x - e10x)/((x - e10x)**2 + (z - e10z)**2) - (x - e11x)/((x - e11x)**2 + (z - e11z)**2) + (x - e12x)/((x - e12x)**2 + (z - e12z)**2) - (x - e13x)/((x - e13x)**2 + (z - e13z)**2) + (x - e14x)/((x - e14x)**2 + (z - e14z)**2) - (x - e15x)/((x - e15x)**2 + (z - e15z)**2))))))))))))))))))"
+particles.Ey_external_particle_function(x,y,z,t) = "0.0"
+particles.Ez_external_particle_function(x,y,z,t) = "if(((x - e0x)**2 + (z - e0z)**2) < re2, 0.0, if(((x - e1x)**2 + (z - e1z)**2) < re2, 0.0, if(((x - e2x)**2 + (z - e2z)**2) < re2, 0.0, if(((x - e3x)**2 + (z - e3z)**2) < re2, 0.0, if(((x - e4x)**2 + (z - e4z)**2) < re2, 0.0, if(((x - e5x)**2 + (z - e5z)**2) < re2, 0.0, if(((x - e6x)**2 + (z - e6z)**2) < re2, 0.0, if(((x - e7x)**2 + (z - e7z)**2) < re2, 0.0, if(((x - e8x)**2 + (z - e8z)**2) < re2, 0.0, if(((x - e9x)**2 + (z - e9z)**2) < re2, 0.0, if(((x - e10x)**2 + (z - e10z)**2) < re2, 0.0, if(((x - e11x)**2 + (z - e11z)**2) < re2, 0.0, if(((x - e12x)**2 + (z - e12z)**2) < re2, 0.0, if(((x - e13x)**2 + (z - e13z)**2) < re2, 0.0, if(((x - e14x)**2 + (z - e14z)**2) < re2, 0.0, if(((x - e15x)**2 + (z - e15z)**2) < re2, 0.0, -cos(Omega*t)*fh16*Vrf*super_C*((z - e0z)/((x - e0x)**2 + (z - e0z)**2) - (z - e1z)/((x - e1x)**2 + (z - e1z)**2) + (z - e2z)/((x - e2x)**2 + (z - e2z)**2) - (z - e3z)/((x - e3x)**2 + (z - e3z)**2) + (z - e4z)/((x - e4x)**2 + (z - e4z)**2) - (z - e5z)/((x - e5x)**2 + (z - e5z)**2) + (z - e6z)/((x - e6x)**2 + (z - e6z)**2) - (z - e7z)/((x - e7x)**2 + (z - e7z)**2) + (z - e8z)/((x - e8x)**2 + (z - e8z)**2) - (z - e9z)/((x - e9x)**2 + (z - e9z)**2) + (z - e10z)/((x - e10x)**2 + (z - e10z)**2) - (z - e11z)/((x - e11x)**2 + (z - e11z)**2) + (z - e12z)/((x - e12x)**2 + (z - e12z)**2) - (z - e13z)/((x - e13x)**2 + (z - e13z)**2) + (z - e14z)/((x - e14x)**2 + (z - e14z)**2) - (z - e15z)/((x - e15x)**2 + (z - e15z)**2))))))))))))))))))"
+
+#################################
 ############ PARTICLES ##########
 #################################
 particles.species_names = ions electrons
@@ -84,7 +150,7 @@ ions.uz_m = 0.0
 ions.ux_th = vth_over_c
 ions.uy_th = 0.0
 ions.uz_th = vth_over_c
-ions.do_not_deposit = 1
+ions.do_not_deposit = 0
 
 electrons.charge = -q_e
 electrons.mass = m_e
@@ -104,7 +170,7 @@ electrons.uz_m = 0.0
 electrons.ux_th = electron_vth_over_c
 electrons.uy_th = 0.0
 electrons.uz_th = electron_vth_over_c
-electrons.do_not_deposit = 1
+electrons.do_not_deposit = 0
 
 #################################
 ######### DIAGNOSTICS ###########
@@ -113,6 +179,6 @@ diagnostics.diags_names = diag1
 diag1.file_prefix = diags
 diag1.intervals = 20
 diag1.diag_type = Full
-diag1.fields_to_plot = none
+diag1.fields_to_plot = Ex Ez phi rho
 diag1.write_species = 1
 diag1.format = openpmd

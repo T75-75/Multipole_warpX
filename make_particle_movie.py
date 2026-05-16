@@ -135,9 +135,9 @@ def build_escape_history(ts, iterations, species):
         lost_ids.update(active_before_escape_ids - present_ids)
 
         active_ids = present_ids & (initial_ids - escaped_ids - lost_ids)
-        active_mask = np.asarray([pid in active_ids for pid in particle_ids_array])
+        active_mask = np.asarray([pid in active_ids for pid in particle_ids_array], dtype=bool)
         visible_escaped_mask = np.asarray(
-            [pid in escaped_ids for pid in particle_ids_array]
+            [pid in escaped_ids for pid in particle_ids_array], dtype=bool
         )
 
         active_inside = int(np.count_nonzero(active_mask & (radius <= R_ESCAPE)))
@@ -297,6 +297,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("diag", nargs="?", default="diags")
     parser.add_argument("--species", default="ions")
+    parser.add_argument(
+        "--movie-species",
+        choices=["ions", "electrons", "both"],
+        default=None,
+        help="species rendered in movie frames (default: same as --species)",
+    )
+    parser.add_argument("--ion-color", default="tab:blue")
+    parser.add_argument("--electron-color", default="tab:orange")
+    parser.add_argument("--no-speed-colormap", action="store_true")
     parser.add_argument("--out", default="particles.mp4")
     parser.add_argument("--frame-dir", default="particle_movie_frames")
     parser.add_argument("--fps", type=int, default=12)
@@ -307,13 +316,16 @@ def main():
     parser.add_argument("--trapped-history", default=None)
     parser.add_argument("--history-samples", type=int, default=1000)
     parser.add_argument("--no-truncate-at-gap", action="store_true")
+    parser.add_argument("--no-movie", action="store_true")
     args = parser.parse_args()
 
     diag_path = resolve_diag(args.diag)
-    frame_dir = Path(args.frame_dir)
-    frame_dir.mkdir(parents=True, exist_ok=True)
-    for old_frame in frame_dir.glob("particles_*.png"):
-        old_frame.unlink()
+    frame_dir = None
+    if not args.no_movie:
+        frame_dir = Path(args.frame_dir)
+        frame_dir.mkdir(parents=True, exist_ok=True)
+        for old_frame in frame_dir.glob("particles_*.png"):
+            old_frame.unlink()
 
     ts = OpenPMDTimeSeries(str(diag_path))
     diagnostic_iterations = filter_iterations(
@@ -332,39 +344,96 @@ def main():
         args.trapped_history,
         n_samples=args.history_samples,
     )
+    if args.no_movie:
+        print("skipping movie generation (--no-movie)")
+        return
+
+    movie_species = args.movie_species if args.movie_species is not None else args.species
+    movie_histories = {args.species: escape_history}
+    if movie_species == "both":
+        for species_name in ("ions", "electrons"):
+            if species_name not in movie_histories:
+                movie_histories[species_name] = build_escape_history(
+                    ts, diagnostic_iterations, species_name
+                )
+    elif movie_species not in movie_histories:
+        movie_histories[movie_species] = build_escape_history(
+            ts, diagnostic_iterations, movie_species
+        )
+
     iterations = select_iterations(diagnostic_iterations, args.max_frames, escape_history)
 
     for frame_index, iteration in enumerate(iterations):
-        x, z, ux, uz, w, particle_ids = ts.get_particle(
-            ["x", "z", "ux", "uz", "w", "id"],
-            species=args.species,
-            iteration=int(iteration),
-        )
-        metrics = escape_history[int(iteration)]
-        particle_ids_array = np.asarray(particle_ids, dtype=np.uint64)
-        active_mask = np.asarray(
-            [pid in metrics["active_ids"] for pid in particle_ids_array]
-        )
-        trapped_now = int(np.count_nonzero(active_mask))
-        escaped_cumulative = metrics["n_escaped_circular"]
-        x = x[active_mask]
-        z = z[active_mask]
-        ux = ux[active_mask]
-        uz = uz[active_mask]
-        w = w[active_mask]
-        speed_gamma_beta = np.sqrt(ux * ux + uz * uz)
-
         fig, ax = plt.subplots(figsize=(6, 6), constrained_layout=True)
         scatter = None
-        if len(x) > 0:
-            scatter = ax.scatter(
-                x * 1.0e3,
-                z * 1.0e3,
-                c=speed_gamma_beta,
-                s=np.clip(w / np.max(w), 0.2, 1.0) * 12.0,
-                cmap="viridis",
-                alpha=0.85,
-                linewidths=0,
+
+        def render_species(species_name, color=None, label=None):
+            nonlocal scatter
+            x, z, ux, uz, w, particle_ids = ts.get_particle(
+                ["x", "z", "ux", "uz", "w", "id"],
+                species=species_name,
+                iteration=int(iteration),
+            )
+            metrics = movie_histories[species_name][int(iteration)]
+            particle_ids_array = np.asarray(particle_ids, dtype=np.uint64)
+            active_mask = np.asarray(
+                [pid in metrics["active_ids"] for pid in particle_ids_array], dtype=bool
+            )
+            x = x[active_mask]
+            z = z[active_mask]
+            ux = ux[active_mask]
+            uz = uz[active_mask]
+            w = w[active_mask]
+            trapped_now = int(np.count_nonzero(active_mask))
+            escaped_cumulative = metrics["n_escaped_circular"]
+
+            if len(x) == 0:
+                return trapped_now, escaped_cumulative
+
+            if args.no_speed_colormap or movie_species == "both":
+                ax.scatter(
+                    x * 1.0e3,
+                    z * 1.0e3,
+                    c=color if color is not None else "tab:blue",
+                    s=12.0,
+                    alpha=0.85,
+                    linewidths=0,
+                    label=label,
+                )
+            else:
+                speed_gamma_beta = np.sqrt(ux * ux + uz * uz)
+                scatter = ax.scatter(
+                    x * 1.0e3,
+                    z * 1.0e3,
+                    c=speed_gamma_beta,
+                    s=np.clip(w / np.max(w), 0.2, 1.0) * 12.0,
+                    cmap="viridis",
+                    alpha=0.85,
+                    linewidths=0,
+                )
+
+            return trapped_now, escaped_cumulative
+
+        if movie_species == "both":
+            ions_trapped, ions_escaped = render_species(
+                "ions", color=args.ion_color, label="ions"
+            )
+            electrons_trapped, electrons_escaped = render_species(
+                "electrons", color=args.electron_color, label="electrons"
+            )
+            title_status = (
+                f"trapped ions = {ions_trapped}, electrons = {electrons_trapped}, "
+                f"escaped ions = {ions_escaped}, electrons = {electrons_escaped}"
+            )
+        else:
+            trapped_now, escaped_cumulative = render_species(
+                movie_species,
+                color=args.ion_color if movie_species == "ions" else args.electron_color,
+                label=movie_species,
+            )
+            title_status = (
+                f"species = {movie_species}, trapped now = {trapped_now}, "
+                f"escaped cumulative = {escaped_cumulative}"
             )
 
         trap = plt.Circle((0.0, 0.0), R0 * 1.0e3, fill=False, color="black", lw=1.2)
@@ -378,8 +447,7 @@ def main():
         time_label = f", t = {time_value * 1.0e6:.3g} us" if time_value is not None else ""
         ax.set_title(
             f"step {int(iteration)}{time_label}\n"
-            f"trapped now = {trapped_now}, "
-            f"escaped cumulative = {escaped_cumulative}"
+            f"{title_status}"
         )
         ax.set_xlabel("x [mm]")
         ax.set_ylabel("project y / WarpX z [mm]")
@@ -387,6 +455,8 @@ def main():
         ax.set_xlim(-1.2, 1.2)
         ax.set_ylim(-1.2, 1.2)
         ax.grid(True, alpha=0.25)
+        if movie_species == "both":
+            ax.legend(loc="upper right")
         if scatter is not None:
             cbar = fig.colorbar(scatter, ax=ax, fraction=0.046, pad=0.04)
             cbar.set_label("gamma beta")
